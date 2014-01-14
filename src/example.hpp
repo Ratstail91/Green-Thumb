@@ -24,6 +24,8 @@
 
 #include "base_scene.hpp"
 
+#include "plant.hpp"
+
 class Example : public BaseScene {
 public:
 	//Public access members
