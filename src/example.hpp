@@ -26,6 +26,10 @@
 
 #include "plant.hpp"
 
+#include "sprite_sheet.hpp"
+
+#include <list>
+
 class Example : public BaseScene {
 public:
 	//Public access members
@@ -45,6 +49,10 @@ protected:
 	void MouseButtonUp(SDL_MouseButtonEvent const&);
 	void KeyDown(SDL_KeyboardEvent const&);
 	void KeyUp(SDL_KeyboardEvent const&);
+
+	//members
+	std::list<Plant> plantList;
+	SpriteSheet spritePlantBasic;
 };
 
 #endif
