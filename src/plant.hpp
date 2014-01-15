@@ -11,8 +11,8 @@ public:
 	typedef std::chrono::steady_clock Clock;
 
 	enum Type {
-		NONE,
-		BASIC,
+		NONE = 0,
+		BASIC = 1,
 	};
 
 	Plant() = default;
@@ -23,6 +23,11 @@ public:
 		pos = {argX, argY};
 		bbox = {0,0,argW,argH};
 	}
+
+	void Update(double delta);
+
+	int SetState(int i) { return state = i; }
+	int GetState() { return state; }
 
 	Vector2 SetPos(Vector2 v) { return pos = v; }
 	Vector2 GetPos() { return pos; }
@@ -37,6 +42,7 @@ public:
 	Clock::duration GetAge() { return Clock::now() - birth; }
 
 private:
+	int state = 0;
 	Vector2 pos;
 	BBox bbox;
 	Type type = Type::NONE;

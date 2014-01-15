@@ -45,7 +45,9 @@ void Example::FrameStart() {
 }
 
 void Example::Update(double delta) {
-	//
+	for (auto& it : plantList) {
+		it.Update(delta);
+	}
 }
 
 void Example::FrameEnd() {
@@ -53,10 +55,10 @@ void Example::FrameEnd() {
 }
 
 void Example::Render(SDL_Surface* const screen) {
-	std::for_each(plantList.begin(), plantList.end(), [&](Plant& it) -> void {
-		imgPlantBasic.SetClipX(32*3);
+	for (auto& it : plantList) {
+		imgPlantBasic.SetClipX(32*it.GetState());
 		imgPlantBasic.DrawTo(screen, it.GetPos().x-16, it.GetPos().y-32);
-	});
+	};
 }
 
 //-------------------------
