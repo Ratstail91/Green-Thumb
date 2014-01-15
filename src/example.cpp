@@ -26,8 +26,9 @@
 //-------------------------
 
 Example::Example() {
-	spritePlantBasic.LoadSurface("rsc/plant_basic.bmp", 4, 1);
-	spritePlantBasic.SetXIndex(3);
+	imgPlantBasic.LoadSurface("rsc/plant_basic.bmp");
+	imgPlantBasic.SetClipX(32*3);
+	imgPlantBasic.SetClipW(32);
 }
 
 Example::~Example() {
@@ -53,7 +54,7 @@ void Example::FrameEnd() {
 void Example::Render(SDL_Surface* const screen) {
 
 	for(auto& it : plantList) {
-		spritePlantBasic.DrawTo(screen, it.GetX(), it.GetY());
+		imgPlantBasic.DrawTo(screen, it.GetX(), it.GetY());
 	}
 }
 

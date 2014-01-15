@@ -19,40 +19,53 @@
  * 3. This notice may not be removed or altered from any source
  * distribution.
 */
-#ifndef EXAMPLE_HPP_
-#define EXAMPLE_HPP_
+#ifndef BBOX_HPP_
+#define BBOX_HPP_
 
-#include "base_scene.hpp"
+#include <stdexcept>
+#include <algorithm>
 
-#include "plant.hpp"
-
-#include "image.hpp"
-
-#include <list>
-
-class Example : public BaseScene {
+class BBox {
 public:
-	//Public access members
-	Example();
-	~Example();
+	//This is explicitly a POD
+	double x, y;
+	double w, h;
 
-protected:
-	//Frame loop
-	void FrameStart();
-	void Update(double delta);
-	void FrameEnd();
-	void Render(SDL_Surface* const);
+	BBox() = default;
+	BBox(double i, double j, double k, double l): x(i), y(j), w(k), h(l) {};
+	~BBox() = default;
+	BBox& operator=(BBox const&) = default;
 
-	//Event handlers
-	void MouseMotion(SDL_MouseMotionEvent const&);
-	void MouseButtonDown(SDL_MouseButtonEvent const&);
-	void MouseButtonUp(SDL_MouseButtonEvent const&);
-	void KeyDown(SDL_KeyboardEvent const&);
-	void KeyUp(SDL_KeyboardEvent const&);
+	double Size() {
+		return std::max(w*h,0.0);
+	}
 
-	//members
-	std::list<Plant> plantList;
-	Image imgPlantBasic;
+	bool IsCollision(BBox rhs) {
+		return not (
+			x >= rhs.x + rhs.w ||
+			y >= rhs.y + rhs.h ||
+			rhs.x >= x + w ||
+			rhs.y >= y + h
+			);
+	}
+
+	BBox Intersect(BBox rhs) {
+		if (!IsCollision(rhs)) {
+			return {0, 0, 0, 0};
+		}
+		BBox ret;
+		ret.x = std::max(x, rhs.x);
+		ret.y = std::max(y, rhs.y);
+		ret.w = std::min(x+w, rhs.x+rhs.w) - ret.x;
+		ret.h = std::min(y+h, rhs.y+rhs.h) - ret.y;
+		return ret;
+	}
+
+	double operator[](size_t i) {
+		if (i >= 4)
+			throw(std::domain_error("Out of range"));
+		return *(&x+i);
+	}
 };
 
 #endif
