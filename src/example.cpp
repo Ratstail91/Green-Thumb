@@ -30,6 +30,7 @@
 Example::Example() {
 	imgPlantBasic.LoadSurface("rsc/plant_basic.bmp");
 	imgPlantBasic.SetClipW(32);
+	imgPlantBasic.SetClipH(32);
 }
 
 Example::~Example() {
@@ -72,7 +73,7 @@ void Example::MouseMotion(SDL_MouseMotionEvent const& motion) {
 }
 
 void Example::MouseButtonDown(SDL_MouseButtonEvent const& button) {
-	plantList.push_back({SeedType::BLUEFRUIT, double(button.x), double(button.y), 32, 32});
+	plantList.push_back({SeedType::BLUEFRUIT});
 }
 
 void Example::MouseButtonUp(SDL_MouseButtonEvent const& button) {
