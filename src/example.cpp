@@ -56,7 +56,9 @@ void Example::FrameEnd() {
 
 void Example::Render(SDL_Surface* const screen) {
 	for (auto& it : plantList) {
-		imgPlantBasic.SetClipX(32*it.GetState());
+		//move this into Plant?
+		imgPlantBasic.SetClipX(32*it.GetStage());
+		imgPlantBasic.SetClipY(32*it.GetType());
 		imgPlantBasic.DrawTo(screen, it.GetPos().x-16, it.GetPos().y-32);
 	};
 }
@@ -70,7 +72,7 @@ void Example::MouseMotion(SDL_MouseMotionEvent const& motion) {
 }
 
 void Example::MouseButtonDown(SDL_MouseButtonEvent const& button) {
-	plantList.push_back({Plant::Type::BASIC, button.x, button.y, 32, 32});
+	plantList.push_back({SeedType::BLUEFRUIT, double(button.x), double(button.y), 32, 32});
 }
 
 void Example::MouseButtonUp(SDL_MouseButtonEvent const& button) {

@@ -1,6 +1,8 @@
 #ifndef PLANT_HPP_
 #define PLANT_HPP_
 
+#include "seed_types.hpp"
+
 #include "bbox.hpp"
 #include "vector2.hpp"
 
@@ -10,24 +12,25 @@ class Plant {
 public:
 	typedef std::chrono::steady_clock Clock;
 
-	enum Type {
-		NONE = 0,
-		BASIC = 1,
-	};
-
 	Plant() = default;
 	~Plant() = default;
 
-	Plant(Type argType, double argX, double argY, double argW, double argH) {
+	Plant(SeedType argType, double argX, double argY, double argW, double argH) {
 		type = argType;
 		pos = {argX, argY};
 		bbox = {0,0,argW,argH};
 	}
 
-	void Update(double delta);
+	void Update(double delta) {
+		//ensure that you don't overgrow the number of stages defined in seedGrowth
+		//check to see if the plant is old enough to grow
+		if (stage < seedGrowth[type].size() && Clock::now() - birth > seedGrowth[type][stage]) {
+			stage++;
+		}
+	}
 
-	int SetState(int i) { return state = i; }
-	int GetState() { return state; }
+	int SetStage(int i) { return stage = i; }
+	int GetStage() { return stage; }
 
 	Vector2 SetPos(Vector2 v) { return pos = v; }
 	Vector2 GetPos() { return pos; }
@@ -35,17 +38,17 @@ public:
 	BBox SetBBox(BBox bb) { return bbox = bb; }
 	BBox GetBBox() { return bbox; }	
 
-	Type SetType(Type t) { return type = t; }
-	Type GetType() { return type; }
+	SeedType SetType(SeedType t) { return type = t; }
+	SeedType GetType() { return type; }
 
 	Clock::time_point ResetAge() { return birth = Clock::now(); }
 	Clock::duration GetAge() { return Clock::now() - birth; }
 
 private:
-	int state = 0;
+	int stage = 0;
 	Vector2 pos;
 	BBox bbox;
-	Type type = Type::NONE;
+	SeedType type;
 	Clock::time_point birth = Clock::now();
 };
 
